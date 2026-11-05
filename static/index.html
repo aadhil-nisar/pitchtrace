@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PitchTrace · Football Route Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23c6f432'/%3E%3Cpath d='M6 22 C12 10, 18 24, 26 9' stroke='%23071a10' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/" id="homeLink">
+    <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="var(--accent)"/><path d="M6 22 C12 10, 18 24, 26 9" stroke="#071a10" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+    <span>Pitch<b>Trace</b></span>
+  </a>
+  <ol class="steps" id="steps">
+    <li data-step="upload">Upload</li>
+    <li data-step="select">Select</li>
+    <li data-step="track">Track</li>
+    <li data-step="results">Results</li>
+  </ol>
+</header>
+
+<main>
+  <!-- ============ 1. UPLOAD ============ -->
+  <section id="view-upload" class="view">
+    <div class="hero">
+      <h1>Follow every run.</h1>
+      <p>Upload a football clip, pick the players or the ball, choose a colour for each one, and get back a video with their full routes drawn on it.</p>
+    </div>
+    <div class="src-tabs">
+      <div class="seg" id="srcSeg">
+        <button class="on" data-src="file">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 16V4m0 0-5 5m5-5 5 5M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Upload a video</button>
+        <button data-src="link">
+          <svg viewBox="0 0 24 24" width="16" height="16"><rect x="2.5" y="5" width="19" height="14" rx="4" fill="currentColor"/><path d="M10 9.2v5.6l4.8-2.8z" fill="var(--bg)"/></svg>YouTube link</button>
+      </div>
+    </div>
+
+    <!-- upload a file -->
+    <div id="srcFile">
+      <label class="drop" id="drop">
+        <input type="file" id="fileInput" accept="video/*,.mkv,.avi" hidden>
+        <div class="drop-inner">
+          <svg viewBox="0 0 48 48" width="52" height="52" aria-hidden="true"><path d="M24 32V12m0 0-8 8m8-8 8 8" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 30v6a4 4 0 0 0 4 4h24a4 4 0 0 0 4-4v-6" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+          <strong>Drop a match video here</strong>
+          <span>or click to choose a file · MP4, MOV, AVI, MKV, WebM · then choose which part to use</span>
+        </div>
+      </label>
+      <div class="clip hidden" id="fileClip">
+        <div class="clip-player">
+          <video id="filePreview" controls muted playsinline preload="metadata"></video>
+          <p class="note hidden" id="noPreview">Your browser can't preview this file type, but it can still be used. Type the start and end times, or leave the end empty to use the whole video.</p>
+        </div>
+        <div class="clip-side">
+          <h3 id="fileName"></h3>
+          <span class="meta" id="fileInfo"></span>
+          <div id="fileRange"></div>
+          <button class="primary big" id="uploadBtn">Upload this part</button>
+          <button class="link" id="otherFile">Choose another file</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- YouTube link -->
+    <div id="srcLink" class="hidden">
+      <form class="link-row" id="linkForm">
+        <input type="url" id="linkInput" placeholder="Paste a YouTube link, e.g. https://www.youtube.com/watch?v=…" autocomplete="off" required>
+        <button class="primary" id="linkCheck" type="submit">Check link</button>
+      </form>
+      <div class="clip hidden" id="linkClip">
+        <div class="clip-player">
+          <div class="yt-wrap"><div id="ytPlayer"></div><img id="ytThumb" class="hidden" alt=""><p class="nopv hidden" id="noLinkPreview">No preview for this link. Type the start and end times of the part you want.</p></div>
+        </div>
+        <div class="clip-side">
+          <h3 id="linkTitle"></h3>
+          <span class="meta" id="linkInfo"></span>
+          <div id="linkRange"></div>
+          <button class="primary big" id="fetchBtn">Get this part</button>
+          <p class="note">Only the selected part is downloaded, at up to 1080p.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="busy hidden" id="busy">
+      <strong id="busyLabel">Working…</strong>
+      <div class="bar"><i id="busyBar"></i></div>
+      <span id="busySub">Keep this tab open</span>
+    </div>
+    <p class="error hidden" id="uploadError"></p>
+    <div class="how">
+      <div><b>1</b><span>Upload a video or paste a YouTube link, then choose the part of the match you want. 10–30 seconds of one camera shot works best.</span></div>
+      <div><b>2</b><span>Click the players and the ball you want (both are found automatically), then pick a route colour for each.</span></div>
+      <div><b>3</b><span>Watch the tracked video, then download it with the route map and the data.</span></div>
+    </div>
+  </section>
+
+  <!-- ============ 2. SELECT ============ -->
+  <section id="view-select" class="view hidden">
+    <div class="select-grid">
+      <div class="stage-col">
+        <div class="toolbar">
+          <div class="seg" role="tablist" aria-label="Selection mode">
+            <button class="on" data-mode="click" id="modeClick">
+              <svg viewBox="0 0 24 24" width="16" height="16"><path d="M5 3l14 8-6 2-2 6z" fill="currentColor"/></svg>Click to select</button>
+            <button data-mode="draw" id="modeDraw">
+              <svg viewBox="0 0 24 24" width="16" height="16"><rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="4 3"/></svg>Draw a box</button>
+          </div>
+          <span class="hint" id="modeHint">Players found on this frame are outlined. Click one to track it.</span>
+        </div>
+        <div class="stage" id="stage">
+          <canvas id="canvas"></canvas>
+          <div class="stage-msg hidden" id="stageMsg"></div>
+          <div class="loading hidden" id="frameLoading"><i></i></div>
+        </div>
+        <div class="scrub">
+          <button class="icon" id="prevFrame" title="Previous frame" aria-label="Previous frame">‹</button>
+          <input type="range" id="frameSlider" min="0" max="0" value="0" aria-label="Start frame">
+          <button class="icon" id="nextFrame" title="Next frame" aria-label="Next frame">›</button>
+          <span class="time" id="frameTime">0:00.0</span>
+        </div>
+        <p class="note" id="scrubNote">Slide to a frame where your player or the ball is clearly visible. Tracking starts from this frame.</p>
+      </div>
+
+      <aside class="panel">
+        <div class="panel-head">
+          <h2>Your selection</h2>
+          <button class="link hidden" id="clearAll">Clear all</button>
+        </div>
+        <div id="targets" class="targets"></div>
+        <div class="empty" id="targetsEmpty">
+          Nothing selected yet. Click a player or the ball (yellow ring) on the frame. If the ball isn’t found, switch to <b>Draw a box</b>.
+        </div>
+
+        <details class="options" open>
+          <summary>Tracking options</summary>
+          <label class="field">
+            <span>Track until <em id="endLabel"></em></span>
+            <input type="range" id="endSlider" min="1" max="1" value="1">
+            <small id="cutNote"></small>
+          </label>
+          <div class="field">
+            <span>Speed</span>
+            <div class="seg small" id="speedSeg">
+              <button class="on" data-step="1">Best</button>
+              <button data-step="2">Faster</button>
+              <button data-step="3">Fastest</button>
+            </div>
+            <small id="speedHint">Every frame is analysed.</small>
+          </div>
+          <div class="field">
+            <span>Route on video</span>
+            <div class="seg small" id="trailSeg">
+              <button class="on" data-trail="full">Full route</button>
+              <button data-trail="recent">Last 3 seconds</button>
+            </div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="enhance" checked>
+            <i></i><span>Enhance frames first <small>(clearer colours and edges)</small></span>
+          </label>
+        </details>
+        <button class="primary big" id="startBtn" disabled>Start tracking</button>
+        <p class="estimate" id="estimate"></p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ 3. TRACKING ============ -->
+  <section id="view-track" class="view hidden">
+    <div class="track-card">
+      <div class="pulse"><span></span></div>
+      <h2 id="trackStage">Starting…</h2>
+      <div class="bar big"><i id="trackBar"></i></div>
+      <div class="track-meta"><span id="trackPct">0%</span><span id="trackEta"></span></div>
+      <div class="chips" id="trackChips"></div>
+      <p class="note">Processing runs on the server, so you can leave this page and come back with the same link.</p>
+      <button class="ghost" id="cancelBtn">Cancel</button>
+      <p class="error hidden" id="trackError"></p>
+      <button class="primary hidden" id="backFromError">Back to selection</button>
+    </div>
+  </section>
+
+  <!-- ============ 4. RESULTS ============ -->
+  <section id="view-results" class="view hidden">
+    <div class="results-head">
+      <div>
+        <h1 id="resTitle">Results</h1>
+        <p class="source" id="resSource"></p>
+        <div class="chips" id="resChips"></div>
+      </div>
+      <div class="res-actions">
+        <button class="ghost" id="trackAgain">Track other players</button>
+        <button class="ghost" id="newVideo">New video</button>
+      </div>
+    </div>
+    <div class="results-grid">
+      <div>
+        <nav class="tabs" id="tabs">
+          <button class="on" data-tab="video">Video</button>
+          <button data-tab="map">Route map</button>
+          <button data-tab="analysis">Analysis</button>
+          <button data-tab="pipeline">Pipeline</button>
+          <button data-tab="check">Check accuracy</button>
+        </nav>
+        <div class="tab" id="tab-video">
+          <video id="resVideo" controls playsinline preload="metadata"></video>
+        </div>
+        <div class="tab hidden" id="tab-map">
+          <a id="mapLink" target="_blank" rel="noopener"><img id="mapImg" alt="Route map with the complete route of every target"></a>
+          <p class="note">Frames are stitched into one view using the camera-motion estimate, so each route shows the complete path even when the camera pans. Open the image to see it full size.</p>
+        </div>
+        <div class="tab hidden" id="tab-analysis"></div>
+        <div class="tab hidden" id="tab-pipeline"></div>
+        <div class="tab hidden" id="tab-check"></div>
+      </div>
+      <aside class="panel downloads">
+        <h2>Download</h2>
+        <a class="dl" id="dlVideo"><b>Tracked video</b><span>MP4 with boxes and routes</span></a>
+        <a class="dl" id="dlMap"><b>Route map</b><span>JPG image with complete routes</span></a>
+        <a class="dl" id="dlCsv"><b>Positions</b><span>CSV, one row per frame per target</span></a>
+        <a class="dl accent" id="dlZip"><b>Everything</b><span>ZIP with video, charts, pipeline images and metrics</span></a>
+        <div class="stats" id="quickStats"></div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<div class="toast hidden" id="toast"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

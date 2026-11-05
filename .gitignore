@@ -1,0 +1,22 @@
+# runtime data (uploads, results)
+data/
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# videos and test outputs (do not commit match footage)
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.webm
+*_gt.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

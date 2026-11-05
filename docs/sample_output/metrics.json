@@ -1,0 +1,308 @@
+{
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 25.0,
+    "frames": 750,
+    "duration": 30.0
+  },
+  "settings": {
+    "start_frame": 0,
+    "end_frame": 749,
+    "frame_step": 1,
+    "enhancement": true,
+    "trail": "full",
+    "processing_width": 960,
+    "output_fps": 25.0
+  },
+  "enhancement": {
+    "enabled": true,
+    "noise_sigma": 2.461,
+    "denoise_applied": true,
+    "bilateral": {
+      "d": 5,
+      "sigmaColor": 22.8,
+      "sigmaSpace": 5
+    },
+    "clahe": {
+      "clipLimit": 2.0,
+      "tileGridSize": [
+        8,
+        8
+      ],
+      "space": "Lab L-channel"
+    },
+    "gamma": 0.913,
+    "unsharp": {
+      "sigma": 1.2,
+      "amount": 0.571
+    },
+    "laplacian_variance": 1456.4
+  },
+  "segmentation": {
+    "hue_band": [
+      43,
+      55
+    ],
+    "hue_peak": 49,
+    "grass_lab_mean": [
+      134.0,
+      103.7,
+      154.5
+    ],
+    "mahalanobis_threshold_d2": 11.57,
+    "line_removal": "white thin components > 5% width",
+    "open_kernel": "ellipse 3x3",
+    "close_kernel": "rect 3x7"
+  },
+  "enhancement_eval": {
+    "original": {
+      "brightness": 108.757,
+      "contrast_rms": 44.091,
+      "entropy": 7.018,
+      "sharpness": 1337.2,
+      "noise_sigma": 2.222
+    },
+    "enhanced": {
+      "brightness": 118.461,
+      "contrast_rms": 53.932,
+      "entropy": 7.487,
+      "sharpness": 5449.363,
+      "noise_sigma": 5.208
+    },
+    "detections_original": 23.12,
+    "detections_enhanced": 23.12,
+    "frames": 8
+  },
+  "processing": {
+    "frames": 750,
+    "tracking_time_s": 198.37,
+    "avg_ms_per_frame": 260.67,
+    "processing_fps": 3.84,
+    "stage_ms": {
+      "enhance": 28.06,
+      "segment": 32.75,
+      "camera": 18.64,
+      "track": 181.22
+    },
+    "players_detected_first_frame": 23,
+    "camera_cuts": [],
+    "shots": 1,
+    "overlay_masked": true
+  },
+  "scale": {
+    "metres_per_pixel": 0.02308,
+    "median_player_height_px": 78.0,
+    "note": "Approximate: assumes 1.8 m player height; perspective makes far players smaller."
+  },
+  "targets": [
+    {
+      "id": "t1",
+      "name": "White 19",
+      "kind": "player",
+      "color": "#ff3b30",
+      "frames": 750,
+      "tracked_pct": 99.9,
+      "redetected_pct": 0.1,
+      "predicted_pct": 0.0,
+      "lost_pct": 0.0,
+      "consistency_pct": 100.0,
+      "route_coverage_pct": 100.0,
+      "redetections": 1,
+      "longest_gap_s": 0.0,
+      "mean_confidence": 0.718,
+      "distance_px": 4669.5,
+      "distance_m": 107.8,
+      "avg_speed_kmh": 12.8,
+      "max_speed_kmh": 26.5
+    },
+    {
+      "id": "t2",
+      "name": "Lime 14",
+      "kind": "player",
+      "color": "#00c7ff",
+      "frames": 750,
+      "tracked_pct": 97.6,
+      "redetected_pct": 0.1,
+      "predicted_pct": 2.3,
+      "lost_pct": 0.0,
+      "consistency_pct": 97.7,
+      "route_coverage_pct": 100.0,
+      "redetections": 1,
+      "longest_gap_s": 0.6,
+      "mean_confidence": 0.688,
+      "distance_px": 2950.2,
+      "distance_m": 68.1,
+      "avg_speed_kmh": 8.1,
+      "max_speed_kmh": 18.1
+    },
+    {
+      "id": "t3",
+      "name": "White 12",
+      "kind": "player",
+      "color": "#ffd60a",
+      "frames": 750,
+      "tracked_pct": 100.0,
+      "redetected_pct": 0.0,
+      "predicted_pct": 0.0,
+      "lost_pct": 0.0,
+      "consistency_pct": 100.0,
+      "route_coverage_pct": 100.0,
+      "redetections": 0,
+      "longest_gap_s": 0.0,
+      "mean_confidence": 0.75,
+      "distance_px": 3130.4,
+      "distance_m": 72.2,
+      "avg_speed_kmh": 8.5,
+      "max_speed_kmh": 20.9
+    },
+    {
+      "id": "t4",
+      "name": "Lime 13",
+      "kind": "player",
+      "color": "#ff2dd1",
+      "frames": 750,
+      "tracked_pct": 99.7,
+      "redetected_pct": 0.3,
+      "predicted_pct": 0.0,
+      "lost_pct": 0.0,
+      "consistency_pct": 100.0,
+      "route_coverage_pct": 100.0,
+      "redetections": 2,
+      "longest_gap_s": 0.0,
+      "mean_confidence": 0.616,
+      "distance_px": 3437.0,
+      "distance_m": 79.3,
+      "avg_speed_kmh": 9.4,
+      "max_speed_kmh": 27.9
+    },
+    {
+      "id": "t5",
+      "name": "Ball",
+      "kind": "ball",
+      "color": "#ffffff",
+      "frames": 750,
+      "tracked_pct": 94.7,
+      "redetected_pct": 1.7,
+      "predicted_pct": 3.6,
+      "lost_pct": 0.0,
+      "consistency_pct": 96.4,
+      "route_coverage_pct": 100.0,
+      "redetections": 13,
+      "longest_gap_s": 0.24,
+      "mean_confidence": 0.673,
+      "distance_px": 10052.2,
+      "distance_m": 232.0,
+      "avg_speed_kmh": 27.7,
+      "max_speed_kmh": 76.9
+    }
+  ],
+  "stages": [
+    {
+      "file": "01_original.jpg",
+      "caption": "Original frame"
+    },
+    {
+      "file": "02_denoised.jpg",
+      "caption": "Stage 1 - Bilateral noise reduction"
+    },
+    {
+      "file": "03_clahe.jpg",
+      "caption": "Stage 2 - CLAHE (Lab L-channel)"
+    },
+    {
+      "file": "04_gamma.jpg",
+      "caption": "Stage 3 - Gamma correction"
+    },
+    {
+      "file": "05_sharpened.jpg",
+      "caption": "Stage 4 - Unsharp masking"
+    },
+    {
+      "file": "06_before_after.jpg",
+      "caption": "Before vs after enhancement"
+    },
+    {
+      "file": "07_hue_histogram.png",
+      "caption": "Hue histogram and learned grass range"
+    },
+    {
+      "file": "08_grass_mask.jpg",
+      "caption": "Grass mask (Lab Mahalanobis colour model)"
+    },
+    {
+      "file": "09_field_mask.jpg",
+      "caption": "Field region (median-filtered grass boundary)"
+    },
+    {
+      "file": "10_foreground_raw.jpg",
+      "caption": "Foreground = field AND NOT grass"
+    },
+    {
+      "file": "10b_pitch_lines.jpg",
+      "caption": "Detected pitch markings (removed)"
+    },
+    {
+      "file": "11_foreground_clean.jpg",
+      "caption": "Lines removed, opening (3x3) + closing (3x7)"
+    },
+    {
+      "file": "12_segmented_players.jpg",
+      "caption": "Segmented players (foreground pixels only)"
+    },
+    {
+      "file": "13_detections.jpg",
+      "caption": "Player detections after shape filtering (23 blobs)"
+    },
+    {
+      "file": "14_target_crops.jpg",
+      "caption": "Selected targets: crop and segmented crop"
+    },
+    {
+      "file": "15_tracking_progression.jpg",
+      "caption": "Frame sequence showing tracking progression"
+    }
+  ],
+  "samples": [
+    {
+      "file": "frame_000000.jpg",
+      "frame": 0,
+      "time": 0.0
+    },
+    {
+      "file": "frame_000107.jpg",
+      "frame": 107,
+      "time": 4.28
+    },
+    {
+      "file": "frame_000214.jpg",
+      "frame": 214,
+      "time": 8.56
+    },
+    {
+      "file": "frame_000321.jpg",
+      "frame": 321,
+      "time": 12.84
+    },
+    {
+      "file": "frame_000428.jpg",
+      "frame": 428,
+      "time": 17.12
+    },
+    {
+      "file": "frame_000535.jpg",
+      "frame": 535,
+      "time": 21.4
+    },
+    {
+      "file": "frame_000642.jpg",
+      "frame": 642,
+      "time": 25.68
+    },
+    {
+      "file": "frame_000749.jpg",
+      "frame": 749,
+      "time": 29.96
+    }
+  ]
+}
