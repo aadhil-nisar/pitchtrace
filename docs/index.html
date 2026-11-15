@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PitchTrace · Football Route Tracker</title>
+<meta name="description" content="Track football players and the ball in match video with classical computer vision. Upload a clip, click the players, get their routes, speed and distance.">
+<meta property="og:title" content="PitchTrace · Football Route Tracker">
+<meta property="og:description" content="Track football players and the ball in match video with classical computer vision.">
+<meta property="og:image" content="https://aadhil-nisar.github.io/pitchtrace/images/website_results.jpg">
+<style>
+  html, body { margin: 0; height: 100%; background: #0b1410; }
+  iframe { display: block; border: 0; width: 100%; height: 100vh; height: 100dvh; }
+  .waking { position: fixed; inset: 0; display: grid; place-items: center; color: #cfe3d6;
+            font: 15px/1.5 system-ui, sans-serif; text-align: center; pointer-events: none; }
+  .waking a { color: #9fd8b0; pointer-events: auto; }
+</style>
+</head>
+<body>
+<div class="waking" id="waking">
+  <p>Starting PitchTrace. The server sleeps when nobody is using it, so the first load can take up to a minute.<br>
+  <a href="https://pitchtrace.blackwave-1cb5c661.southeastasia.azurecontainerapps.io/">Open it directly</a></p>
+</div>
+<iframe id="app" title="PitchTrace" allow="fullscreen; clipboard-write"></iframe>
+<script>
+  var APP = "https://pitchtrace.blackwave-1cb5c661.southeastasia.azurecontainerapps.io/";
+  var frame = document.getElementById("app");
+  frame.src = APP + location.hash;
+  frame.addEventListener("load", function () { document.getElementById("waking").style.display = "none"; });
+  window.addEventListener("message", function (e) {
+    if (e.origin + "/" !== APP || !e.data || typeof e.data.pitchtraceHash !== "string") return;
+    history.replaceState(null, "", location.pathname + e.data.pitchtraceHash);
+  });
+</script>
+</body>
+</html>
